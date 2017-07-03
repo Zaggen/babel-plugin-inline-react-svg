@@ -65,8 +65,31 @@ npm install --save-dev babel-plugin-inline-react-svg
     ]
   ]
 }
-
 ```
+- *`alias`* - An object with alias for module resolution
+- *`root`* - A relative path string (Starting from CWD), it only works in conjunction with alias.
+Example:
+
+```json
+{
+  "plugins": [
+    [
+      "inline-react-svg",
+      {
+        "alias": {
+          "plugins": [
+            "root": "./",
+            "alias": {
+            "svgs": "svgs"
+            }
+          ]
+        }
+      }
+    ]
+  ]
+}
+```
+**Note:** If root is not specified it will always start resolving from the project root
 
 ### Via CLI
 
