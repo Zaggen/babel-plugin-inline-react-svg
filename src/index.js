@@ -1,4 +1,4 @@
-import { extname, dirname } from 'path';
+import { extname, dirname, resolve } from 'path';
 import { readFileSync } from 'fs';
 import template from 'babel-template';
 import traverse from 'babel-traverse';
@@ -17,7 +17,7 @@ let ignoreRegex;
 export default ({ types: t }) => ({
   visitor: {
     ImportDeclaration(path, state) {
-      const { ignorePattern } = state.opts;
+      const { ignorePattern, root, alias } = state.opts;
       if (ignorePattern) {
         // Only set the ignoreRegex once:
         ignoreRegex = ignoreRegex || new RegExp(ignorePattern);
@@ -31,7 +31,15 @@ export default ({ types: t }) => ({
         // We only support the import default specifier, so let's use that identifier:
         const importIdentifier = path.node.specifiers[0].local;
         const iconPath = state.file.opts.filename;
-        const svgPath = resolveFrom(dirname(iconPath), path.node.source.value);
+        const aliasMatch = alias[path.node.source.value.split('/')[0]];
+        let svgPath;
+        if(aliasMatch){
+          const resolveRoot = resolve(process.cwd(), root || './');
+          const aliasedPath = resolve(resolveRoot, aliasMatch);
+          svgPath = aliasedPath + path.node.source.value.replace(aliasMatch);
+        } else {
+          svgPath = resolveFrom(dirname(iconPath), path.node.source.value);
+        }
         const rawSource = readFileSync(svgPath, 'utf8');
         const optimizedSource = state.opts.svgo === false
           ? rawSource
