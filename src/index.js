@@ -36,7 +36,7 @@ export default ({ types: t }) => ({
         if(aliasMatch){
           const resolveRoot = resolve(process.cwd(), root || './');
           const aliasedPath = resolve(resolveRoot, aliasMatch);
-          svgPath = aliasedPath + path.node.source.value.replace(aliasMatch);
+          svgPath = aliasedPath + path.node.source.value.replace(aliasMatch, '');
         } else {
           svgPath = resolveFrom(dirname(iconPath), path.node.source.value);
         }
