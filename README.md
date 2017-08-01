@@ -74,15 +74,10 @@ Example:
 {
   "plugins": [
     [
-      "inline-react-svg",
-      {
+      "inline-react-svg", {
+        "root": "./",
         "alias": {
-          "plugins": [
-            "root": "./",
-            "alias": {
-            "svgs": "svgs"
-            }
-          ]
+          "svgs": "svgs"
         }
       }
     ]
